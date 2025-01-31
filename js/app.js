@@ -1,4 +1,5 @@
-// console.log('let write JS');
+fetch('https://PruthvirajGaikwad.github.io/Spotify-Clone/songs.json');
+
 let currentSong = new Audio();
 let songs;
 let currFolder;
@@ -32,8 +33,10 @@ async function getSongs(folder){
         }
      }
      
+     
+     
      //Show all the songs in the playlists
-    let songUL = document.querySelector(".songlist").getElementsByTagName("ul")[0];
+    let songUL = document.querySelector(".songlist").getElementsByTagName("ul")[0]
     songUL.innerHTML=""
     for (const song of songs) {
         songUL.innerHTML = songUL.innerHTML + `<li><img class="invert" src="images/music.svg" alt="">
@@ -56,12 +59,13 @@ async function getSongs(folder){
     return songs
 }
 
+
+
 const playMusic = (track, pause=false) =>{
-   // let audio = new Audio("/songs/" + track)
    currentSong.src = `/${currFolder}/` + track
    if(!pause){
       currentSong.play()
-   play.src = "images/pause.svg"
+      play.src = "images/pause.svg"
 
    }
    document.querySelector(".songinfo").innerHTML = decodeURI(track)
@@ -70,7 +74,7 @@ const playMusic = (track, pause=false) =>{
 }
 
 async function displayAlbums(){
-     console.log("displaying Albums")
+   //   console.log("displaying Albums")
      let  a = await fetch(`/songs/`)
      let response = await a.text();
      let div = document.createElement("div");
@@ -80,22 +84,20 @@ async function displayAlbums(){
      let array =  Array.from(anchors)
       for (let index = 0; index < array.length; index++) {
          const e = array[index];
-      if(e.href.includes("/songs/") && !e.href.includes(".htaccess")){
+        if(e.href.includes("/songs/") && !e.href.includes(".htaccess")){
          let folder = e.href.split("/").slice(-1)[0]
         //Get the metadata of the folder
          let  a = await fetch(`/songs/${folder}/info.json`)
          let response = await a.json();
-         console.log(response)
          cardContainer.innerHTML = cardContainer.innerHTML + `<div data-folder="${folder}" class="card ">
                       <div class="play">
-                        <!-- #<div style="display: inline-block; padding: 5px;"> -->
                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="70" height="150" fill="none">
                               <circle cx="24" cy="24" r="18" fill="#1ed660"/>
                               <path d="M19 22.3996V25.6004C19 28.639 19 30.1582 19.9115 30.7724C20.823 31.3865 22.0696 30.707 24.563 29.3482L27.4994 27.7476C30.4998 26.1124 32 25.2948 32 24C32 22.7052 30.4998 21.8876 27.4994 20.2524L24.563 18.6518C22.0696 17.293 20.823 16.6136 19.9115 17.2278C19 17.842 19 19.361 19 22.3996Z" fill="black"/>
                           </svg>
                       </div>
 
-                        <img src="/songs/${folder}/cover.jpg" alt="playlist1">
+                        <img src="/songs/${folder}/cover.jpg" alt="">
                         <h2>${response.title}</h2>
                         <p>${response.description}</p>
                       </div>`
@@ -109,45 +111,43 @@ async function displayAlbums(){
             console.log("Fetching Songs")
             songs = await getSongs(`songs/${item.currentTarget.dataset.folder}`)
             playMusic(songs[0])
+         
          })
       })
 }
+
 async function main(){
    //Get the list of all songs
     await getSongs("songs/ncs");
      playMusic(songs[0], true)
     
    // Display all the albums on page 
-     
       await displayAlbums()
 
-   //  Attach event listener to play, next and previous
 
+   //  Attach event listener to play, next and previous
    play.addEventListener("click", ()=>{
       if(currentSong.paused){
          currentSong.play()
          play.src = "images/pause.svg"
-      }else {
+      }
+      else {
          currentSong.pause()
          play.src = "images/play.svg"
-
       }
    })
 
    //Listen for timeupdate event
    currentSong.addEventListener("timeupdate", ()=> {
-   document.querySelector(".songtime").innerHTML = `${secondsToMinutesSeconds(currentSong.
-      currentTime)} / ${secondsToMinutesSeconds(currentSong.duration)}`
-      document.querySelector(".circle").style.left = (currentSong.currentTime/currentSong.duration)
-      * 100 + "%";
-      
+         document.querySelector(".songtime").innerHTML = `${secondsToMinutesSeconds(currentSong.currentTime)} / ${secondsToMinutesSeconds(currentSong.duration)}`
+         document.querySelector(".circle").style.left = (currentSong.currentTime/currentSong.duration)* 100 + "%";
    })
 
    //Add event listener to seekbar
    document.querySelector(".seekbar").addEventListener("click", e=>{
-      let perscent = (e.offsetX / e.target.getBoundingClientRect().width) * 100;
-      document.querySelector(".circle").style.left = perscent + "%";
-      currentSong.currentTime = (currentSong.duration * perscent) / 100;
+      let percent = (e.offsetX / e.target.getBoundingClientRect().width) * 100;
+      document.querySelector(".circle").style.left = percent + "%";
+      currentSong.currentTime = ((currentSong.duration) * percent) / 100;
    })
 
    // Add an event listener for hamburger
@@ -163,7 +163,7 @@ async function main(){
    // Add an event listener to previous
    previous.addEventListener("click",()=>{
       currentSong.pause()
-      console.log("previous clicked");
+      console.log("previous clicked")
       let index = songs.indexOf(currentSong.src.split("/").slice(-1)[0])
       if((index - 1) >= 0) {
          playMusic(songs[index - 1])
@@ -184,12 +184,16 @@ async function main(){
    // Add an event listener to volume ( seekbar )
    document.querySelector(".range").getElementsByTagName("input")[0].addEventListener("change",(e)=>{
        console.log("setting volume to", e.target.value,"/ 100");
-       currentSong.volume = parseInt(e.target.value)/100
+       currentSong.volume = parseInt(e.target.value) / 100
+       if (currentSong.volume > 0){
+         document.querySelector(".volume>img").src = document.querySelector(".volume>img").src.replace("mute.svg", "volume.svg")
+       } else {
+         document.querySelector(".volume>img").src = document.querySelector(".volume>img").src.replace("volume.svg", "mute.svg")
+       }
    })
 
    // Add event listener to mute the track 
    document.querySelector(".volume>img").addEventListener("click", e=>{
-         
          if(e.target.src.includes("volume.svg")){
             e.target.src = e.target.src.replace("volume.svg", "mute.svg")
             currentSong.volume = 0;
@@ -204,6 +208,8 @@ async function main(){
    })
 
 }
+
+
 
 main()
 

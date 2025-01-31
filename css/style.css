@@ -126,8 +126,8 @@ body {
     display: inline-block;
     padding: 5px;
     position: absolute;
-    top: 94px;
-    right: 5px;
+    bottom: 40px;
+    right: 10px;
     opacity: var(--a);
     transition: all 1s ease-out;
     /* opatacity : 1
@@ -180,6 +180,9 @@ body {
 }
 
 .playbar{
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position: fixed;
     bottom: 30px;
     background-color: rgb(88, 116, 88);
@@ -259,7 +262,7 @@ body {
     border-radius: 10px;
     background-color: black;
     position: absolute;
-    bottom: 0;
+    bottom: 3px;
     margin: 6px;
     cursor: pointer;
 }
@@ -311,12 +314,18 @@ body {
 @media (max-width: 1200px) {
     .left{
         position: absolute;
-        left: -120%;
+        left: -130%;
         transition: all .3s;
         z-index: 1;
         width: 373px;
         background-color: black;
         padding: 0;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+    }
+    .songinfo, .songtime{
+        width: auto;
     }
     .left .close{
         position: absolute;
@@ -340,9 +349,6 @@ body {
     .seekbar{
         width: calc(100vw - 70px);;
     }
-    /* .abovebar.songtime{
-        gap: 20px;
-    } */
     .hamburger{
         display: block;
     }
@@ -350,7 +356,7 @@ body {
         margin: 0;
     }
     .card{
-        width: 44vw;
+        width: 55vw;
     }
     .cardContainer{
         margin: 0;
@@ -364,17 +370,54 @@ body {
         align-items: center;
         gap: 20px;
     }
-    .songinfo, .songtime{
-        width: auto;
+    .cardContainer {
+        max-height: unset;
+        overflow-y: unset;
+        margin-bottom: 35vh;
     }
-  }
-  @media (max-width: 1200px) {
-    .card{
-        width: 80vw;
+    .playbar{
+        right: 20px;
     }
+    .play{
+        display: inline-block;
+        padding: 15px;
+        position: absolute;
+        bottom: 40px;
+        right: 10px;
+        opacity: var(--a);
+        transition: all 1s ease-out;
+        }
   }
   @media (max-width: 500px) {
     .card{
-        width: auto;
+        width: 100%;
+    }
+    .header>*{
+        padding: 2px;
+    }
+    .buttons > * {
+        margin: 0px 6px;
+    }
+    .header{
+        padding: 7px;
+    }
+    .spotifyPlaylists h1 {
+        padding: 4px;
+    }
+    .library{
+        height: 85vh;
+    }
+    .left{
+       
+        width: 100vw;
+    }
+    .play{
+        display: inline-block;
+        padding: 5px;
+        position: absolute;
+        bottom: 40px;
+        right: 10px;
+        opacity: var(--a);
+        transition: all 1s ease-out;
     }
   }
